@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <a href="/">Home</a>
+  <h1>{{ book_viewed.title }}</h1>
+  <p>ID: {{ book_viewed.id }}</p>
+  <p>Description: {{ book_viewed.desc }}</p>
+  <ul>Authors:
+    {% for auth in book_viewed.authors.all %}
+      <li>{{ auth.first_name }} {{ auth.last_name }}</li>
+    {% endfor %}
+  </ul>
+  <h4>Add an Author</h4>
+  <form action="/add_auth_to_book" method="post">
+    {%  csrf_token %}
+    <input type="hidden" name="book_id" value="{{ book_viewed.id }}">
+    <select name="auth_id">
+      {% for auth in auth_of %}
+        {% if auth not in book_viewed.authors.all %}
+          <option value="{{ auth.id }}">{{ auth.first_name }} {{ auth.last_name }}</option>
+        {% endif %}
+      {% endfor %}
+    </select>
+    <button typy="submit">Add</button>
+  </form>
+</body>
+</html>
